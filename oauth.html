@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Authorization — Reelrelay</title>
+<style>
+  body{font:16px/1.6 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:#1a1a1a;margin:0}
+  main{max-width:640px;margin:0 auto;padding:56px 24px}
+  h1{font-size:26px}
+  .code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:15px;
+        background:#f4f4f4;border:1px solid #e0e0e0;border-radius:10px;padding:16px;word-break:break-all;margin-top:8px}
+  button{margin-top:14px;font:600 15px/1 inherit;padding:11px 18px;border:0;border-radius:9px;background:#111;color:#fff;cursor:pointer}
+  .muted{color:#666}
+  .err{color:#b00020}
+</style>
+</head>
+<body>
+<main>
+  <h1>Reelrelay — account connected</h1>
+  <p class="muted">Copy the authorization code below and paste it back into the terminal prompt.</p>
+  <div id="box">
+    <div class="code" id="code">Reading code…</div>
+    <button id="copy">Copy code</button>
+  </div>
+  <p class="muted" id="note"></p>
+<script>
+  var p = new URLSearchParams(location.search);
+  var code = p.get('code'); var err = p.get('error');
+  var el = document.getElementById('code');
+  var note = document.getElementById('note');
+  if (code) {
+    el.textContent = code;
+    note.textContent = 'state: ' + (p.get('state') || '(none)');
+    document.getElementById('copy').onclick = function(){
+      navigator.clipboard.writeText(code).then(function(){ this.textContent='Copied'; }.bind(this));
+    };
+  } else {
+    el.className = 'code err';
+    el.textContent = 'No code in the URL.' + (err ? ' Error: ' + err : '');
+    document.getElementById('copy').style.display = 'none';
+  }
+</script>
+</main>
+</body>
+</html>
